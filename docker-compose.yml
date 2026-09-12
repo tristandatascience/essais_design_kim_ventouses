@@ -1,10 +1,9 @@
-# Projet Docker volontairement distinct du site de prod (soma-souffle, port 8080) :
-# nom de projet, conteneur, image et port (8081) séparés — aucun risque de collision.
-name: essais-design-maquettes
-
+# Affichage des maquettes (nginx) — compatible docker-compose v1 et v2.
+# Projet isolé du site de prod (soma-souffle, port 8080) :
+# dossier, conteneur (essais-design), image et port (8081) distincts.
+# Sur le VPS : charger l'image pré-construite (docker load) puis `up` —
+# le `build:` n'est utilisé que si l'image est absente.
 services:
-  # ── Production : affichage des maquettes (VPS) ──
-  # docker compose up -d          → http://localhost:8081
   web:
     build: .
     image: essais-design-kim-ventouses:latest
@@ -13,19 +12,3 @@ services:
       - "${APP_PORT:-8081}:80"
     restart: unless-stopped
     mem_limit: 50m
-
-  # ── Dev : serveur Vite avec hot-reload ──
-  # docker compose --profile dev up
-  dev:
-    image: node:22-alpine
-    profiles: ["dev"]
-    working_dir: /app
-    volumes:
-      - .:/app
-      - node_modules:/app/node_modules
-    ports:
-      - "5173:5173"
-    command: sh -c "npm install && npm run dev"
-
-volumes:
-  node_modules:

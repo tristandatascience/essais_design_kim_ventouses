@@ -14,7 +14,7 @@ depuis une page d'accueil commune.
 **Dev (hot-reload)** :
 
 ```bash
-docker compose --profile dev up    # → http://localhost:5173
+docker compose -f docker-compose.dev.yml up    # → http://localhost:5173
 ```
 
 **Production / VPS** (build Vite + nginx, image ~25 Mo) :
@@ -23,19 +23,25 @@ docker compose --profile dev up    # → http://localhost:5173
 docker compose up -d               # → http://localhost:8081 (APP_PORT modifiable)
 ```
 
-Projet Docker **isolé** du site de prod (`soma-souffle`, port 8080) : nom de
-projet compose (`essais-design-maquettes`), conteneur (`essais-design`), image
-et port tous distincts — aucun risque de collision.
+Le `docker-compose.yml` est compatible avec les anciens `docker-compose` v1 et
+les `docker compose` v2 (pas de `name:` ni de `profiles`). Projet Docker
+**isolé** du site de prod (`soma-souffle`, port 8080) : dossier, conteneur,
+image et port tous distincts.
 
 ### Déployer sur le VPS
 
-Construire sur la machine de dev puis exporter (jamais de `npm install` sur le VPS) :
+Sur le VPS, ne jamais builder : charger l'image pré-construite.
 
 ```bash
+# machine de dev
 docker compose build web
 docker save essais-design-kim-ventouses:latest | gzip > maquettes.tar.gz
-scp maquettes.tar.gz docker-compose.yml nginx.conf user@vps:
-# sur le VPS : gunzip -c maquettes.tar.gz | docker load && docker compose up -d
+scp maquettes.tar.gz user@vps:/home/essais_design_kim_ventouses/
+
+# VPS (dossier du repo cloné)
+gunzip -c maquettes.tar.gz | docker load
+docker compose up -d        # ou docker-compose up -d (v1 accepté)
+# l'image étant déjà chargée, le champ build: ne déclenche aucune compilation
 ```
 
 La maquette 3 est servie telle quelle après build (HTML/CSS/JS produits par
