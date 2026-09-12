@@ -11,13 +11,35 @@ depuis une page d'accueil commune.
 
 ## Voir les maquettes
 
+**Dev (hot-reload)** :
+
 ```bash
-docker compose up        # serveur Vite dans un conteneur Node 22
-# → http://localhost:5173
+docker compose --profile dev up    # → http://localhost:5173
 ```
 
-Les maquettes 1 et 2 s'ouvrent aussi directement en double-cliquant sur le
-fichier `maquette-1.html` / `maquette-2.html` (aucune dépendance).
+**Production / VPS** (build Vite + nginx, image ~25 Mo) :
+
+```bash
+docker compose up -d               # → http://localhost:8081 (APP_PORT modifiable)
+```
+
+Projet Docker **isolé** du site de prod (`soma-souffle`, port 8080) : nom de
+projet compose (`essais-design-maquettes`), conteneur (`essais-design`), image
+et port tous distincts — aucun risque de collision.
+
+### Déployer sur le VPS
+
+Construire sur la machine de dev puis exporter (jamais de `npm install` sur le VPS) :
+
+```bash
+docker compose build web
+docker save essais-design-kim-ventouses:latest | gzip > maquettes.tar.gz
+scp maquettes.tar.gz docker-compose.yml nginx.conf user@vps:
+# sur le VPS : gunzip -c maquettes.tar.gz | docker load && docker compose up -d
+```
+
+La maquette 3 est servie telle quelle après build (HTML/CSS/JS produits par
+Vite dans `dist/`, servis par nginx avec gzip et cache long sur les assets).
 
 ## Build statique
 

@@ -1,6 +1,24 @@
+# Projet Docker volontairement distinct du site de prod (soma-souffle, port 8080) :
+# nom de projet, conteneur, image et port (8081) séparés — aucun risque de collision.
+name: essais-design-maquettes
+
 services:
-  vite:
+  # ── Production : affichage des maquettes (VPS) ──
+  # docker compose up -d          → http://localhost:8081
+  web:
+    build: .
+    image: essais-design-kim-ventouses:latest
+    container_name: essais-design
+    ports:
+      - "${APP_PORT:-8081}:80"
+    restart: unless-stopped
+    mem_limit: 50m
+
+  # ── Dev : serveur Vite avec hot-reload ──
+  # docker compose --profile dev up
+  dev:
     image: node:22-alpine
+    profiles: ["dev"]
     working_dir: /app
     volumes:
       - .:/app
@@ -8,7 +26,6 @@ services:
     ports:
       - "5173:5173"
     command: sh -c "npm install && npm run dev"
-    restart: unless-stopped
 
 volumes:
   node_modules:
