@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Essais de design — Ventouses & Gua Sha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Sora:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ivoire:#f4f1ea; --creme:#ece7db; --forest:#1c3226; --forest-3:#0f1c14;
+    --sand:#d9c9a6; --terra:#b0603f; --or:#c8a15f; --encre:#232a21; --doux:#66705f;
+    --serif:"Fraunces",Georgia,serif; --sans:"Sora",system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:var(--ivoire);color:var(--encre);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .c{max-width:1080px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2.5rem)}
+  .etq{font-size:.7rem;letter-spacing:.3em;text-transform:uppercase;font-weight:600}
+
+  header.entete{padding:clamp(4rem,8vw,6.5rem) 0 3rem}
+  .etete-1{color:var(--terra)}
+  h1{font-family:var(--serif);font-weight:300;font-size:clamp(2.4rem,5.6vw,4.2rem);line-height:1.06;margin:1rem 0 .9rem}
+  h1 em{font-style:italic;color:var(--forest)}
+  .entete p.sous{color:var(--doux);max-width:52ch;font-weight:300}
+  .filet{height:1px;background:linear-gradient(90deg,transparent,#00000018,transparent);border:none;margin:2.6rem 0 3.4rem}
+
+  .grille{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;padding-bottom:1rem}
+  .carte{position:relative;border-radius:24px;overflow:hidden;background:#fff;border:1px solid #1c322612;display:flex;flex-direction:column;transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s ease}
+  .carte:hover{transform:translateY(-7px);box-shadow:0 30px 60px -28px rgba(15,28,20,.3)}
+  .apercu{height:190px;position:relative;display:flex;align-items:flex-end;padding:1.1rem}
+  .apercu .mini-titre{font-family:var(--serif);font-style:italic;font-size:1.35rem;line-height:1.1;text-shadow:0 1px 12px rgba(0,0,0,.18)}
+  .m1 .apercu{background:linear-gradient(135deg,#f7f4ed 55%,#e8d9cd);color:#26241e}
+  .m1 .apercu::after{content:"No 01";position:absolute;top:1rem;right:1.2rem;font-size:.62rem;letter-spacing:.26em;color:#9a5b3c;text-transform:uppercase}
+  .m2 .apercu{background:radial-gradient(120% 130% at 50% 0%,#1d2519 40%,#0f130e 100%);color:#eae6da}
+  .m2 .apercu::after{content:"No 02";position:absolute;top:1rem;right:1.2rem;font-size:.62rem;letter-spacing:.26em;color:#c8a15f;text-transform:uppercase}
+  .m2 .apercu .lignes{position:absolute;left:1.2rem;right:1.2rem;top:1.1rem;height:1px;background:linear-gradient(90deg,#c8a15f55,transparent)}
+  .m3 .apercu{background:radial-gradient(90% 120% at 50% 115%,#d9c9a6cc 30%,transparent 70%),linear-gradient(180deg,#f4f1ea,#ece7db);color:#1c3226}
+  .m3 .apercu::after{content:"No 03";position:absolute;top:1rem;right:1.2rem;font-size:.62rem;letter-spacing:.26em;color:#b0603f;text-transform:uppercase}
+  .corps{padding:1.5rem 1.5rem 1.7rem;display:flex;flex-direction:column;flex:1}
+  .corps h2{font-family:var(--sans);font-weight:600;font-size:1.18rem;color:var(--forest);letter-spacing:-.01em}
+  .corps p{margin-top:.55rem;font-size:.88rem;color:var(--doux);font-weight:300;flex:1}
+  .nuancier{display:flex;gap:.45rem;margin-top:1.1rem}
+  .pastille{width:22px;height:22px;border-radius:7px;border:1px solid #00000012}
+  .ouvrir{margin-top:1.3rem;display:inline-flex;align-items:center;gap:.55rem;font-size:.74rem;letter-spacing:.2em;text-transform:uppercase;font-weight:600;color:var(--forest);transition:gap .3s ease}
+  .carte:hover .ouvrir{gap:.95rem;color:var(--terra)}
+
+  .note{margin:2.2rem 0 4rem;padding:1.3rem 1.6rem;border-radius:18px;background:var(--creme);font-size:.88rem;color:var(--doux);border:1px solid #1c322610}
+  .note b{color:var(--forest);font-weight:600}
+
+  footer{border-top:1px solid #1c322614;padding:2.2rem 0 2.8rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--doux);font-weight:600}
+
+  @media (max-width:900px){.grille{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="entete c">
+  <p class="etq etete-1">Ventouses &amp; Gua Sha · Ivry-sur-Seine</p>
+  <h1>Trois essais,<br>trois <em>tempéraments</em>.</h1>
+  <p class="sous">Trois directions de design pour le site du cabinet — même contenu, même structure, trois ambiances. Ouvrez, comparez, dites celle qui vous ressemble.</p>
+  <hr class="filet">
+</header>
+
+<main class="c">
+  <div class="grille">
+
+    <a class="carte m1" href="maquette-1.html">
+      <div class="apercu"><span class="mini-titre">Relâcher ce<br>qui s'accumule</span></div>
+      <div class="corps">
+        <h2>Nº1 — Papier</h2>
+        <p>Direction éditoriale lumineuse : Fraunces en grand, filets fins, composition de magazine. Sobre, lettré, beaucoup de blanc.</p>
+        <div class="nuancier" aria-hidden="true">
+          <span class="pastille" style="background:#f7f4ed"></span>
+          <span class="pastille" style="background:#9a5b3c"></span>
+          <span class="pastille" style="background:#7d8f6d"></span>
+          <span class="pastille" style="background:#26241e"></span>
+        </div>
+        <span class="ouvrir">Ouvrir la maquette →</span>
+      </div>
+    </a>
+
+    <a class="carte m2" href="maquette-2.html">
+      <div class="apercu"><span class="lignes" aria-hidden="true"></span><span class="mini-titre">Le corps se souvient,<br>la main dénoue</span></div>
+      <div class="corps">
+        <h2>Nº2 — Nocturne</h2>
+        <p>Ambiance spa premium : vert profond, or champagne, cartes de verre dépoli. enveloppant, calme, haut de gamme.</p>
+        <div class="nuancier" aria-hidden="true">
+          <span class="pastille" style="background:#0f130e"></span>
+          <span class="pastille" style="background:#c8a15f"></span>
+          <span class="pastille" style="background:#8fac80"></span>
+          <span class="pastille" style="background:#eae6da"></span>
+        </div>
+        <span class="ouvrir">Ouvrir la maquette →</span>
+      </div>
+    </a>
+
+    <a class="carte m3" href="maquette-3.html">
+      <div class="apercu"><span class="mini-titre">Un corps qui accumule<br>moins qu'on ne croit</span></div>
+      <div class="corps">
+        <h2>Nº3 — Contemporain</h2>
+        <p>Sobre et chaleureux, esprit produit moderne : nav pilule, grille bento, animations de défilement (Vite + Tailwind + GSAP).</p>
+        <div class="nuancier" aria-hidden="true">
+          <span class="pastille" style="background:#f4f1ea"></span>
+          <span class="pastille" style="background:#1c3226"></span>
+          <span class="pastille" style="background:#d9c9a6"></span>
+          <span class="pastille" style="background:#b0603f"></span>
+        </div>
+        <span class="ouvrir">Ouvrir la maquette →</span>
+      </div>
+    </a>
+
+  </div>
+
+  <p class="note"><b>Pour lancer en local :</b> <code>docker compose up</code> puis ouvrir <code>http://localhost:5173</code> (les maquettes 1 et 2 s'ouvrent aussi directement en double-cliquant sur le fichier). La maquette retenue servira de base au site final.</p>
+</main>
+
+<footer class="c">
+  <span>Essais de design — Ventouses &amp; Gua Sha</span>
+  <span>3 maquettes · 1 page d'accueil</span>
+</footer>
+
+</body>
+</html>

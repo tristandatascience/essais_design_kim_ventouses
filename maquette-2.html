@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maquette 2 · Nocturne — Ventouses & Gua Sha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --nuit:#0f130e; --nuit-2:#161c14; --brume:#eae6da; --brume-doux:rgba(234,230,218,.62);
+    --or:#c8a15f; --or-clair:#e2c48d; --sauge:#8fac80;
+    --carte:rgba(255,255,255,.035); --carte-bord:rgba(200,161,95,.22);
+    --serif:"Cormorant Garamond",Georgia,serif; --sans:"Jost",system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--nuit);color:var(--brume);font-family:var(--sans);font-weight:300;line-height:1.65;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .conteneur{max-width:1160px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2.5rem)}
+  .etiquette{font-size:.72rem;letter-spacing:.42em;text-transform:uppercase;color:var(--or);font-weight:500}
+
+  /* ── Halo d'ambiance ── */
+  .halo{position:fixed;inset:0;z-index:-1;pointer-events:none}
+  .halo::before{content:"";position:absolute;top:-30%;left:50%;transform:translateX(-50%);width:900px;height:700px;border-radius:50%;
+    background:radial-gradient(circle,rgba(143,172,128,.13),transparent 65%)}
+  .halo::after{content:"";position:absolute;bottom:-20%;right:-10%;width:600px;height:600px;border-radius:50%;
+    background:radial-gradient(circle,rgba(200,161,95,.09),transparent 65%)}
+
+  /* ── Nav ── */
+  header nav{position:sticky;top:0;z-index:50;background:rgba(15,19,14,.75);backdrop-filter:blur(14px);border-bottom:1px solid rgba(200,161,95,.14)}
+  .nav-int{max-width:1160px;margin:0 auto;padding:1.15rem clamp(1.25rem,4vw,2.5rem);display:flex;justify-content:space-between;align-items:center}
+  .marque{font-family:var(--serif);font-size:1.35rem;letter-spacing:.06em}
+  .marque em{font-style:italic;color:var(--or)}
+  .nav-liens{display:flex;gap:2.2rem;font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;color:var(--brume-doux)}
+  .nav-liens a{transition:color .25s}
+  .nav-liens a:hover{color:var(--or-clair)}
+  .nav-cta{font-size:.8rem;letter-spacing:.18em;text-transform:uppercase;border:1px solid var(--carte-bord);color:var(--or-clair);padding:.62rem 1.5rem;border-radius:999px;transition:.3s}
+  .nav-cta:hover{background:var(--or);color:var(--nuit);border-color:var(--or)}
+
+  /* ── Hero ── */
+  .hero{padding:clamp(5rem,11vw,8.5rem) 0 clamp(3.5rem,7vw,5.5rem);text-align:center;position:relative}
+  .hero h1{font-family:var(--serif);font-weight:300;font-size:clamp(3rem,8vw,6.2rem);line-height:1.04;letter-spacing:.005em;margin:1.6rem auto 0;max-width:16ch}
+  .hero h1 em{font-style:italic;color:var(--or-clair)}
+  .hero h1 .sauge-mot{color:var(--sauge);font-style:italic}
+  .hero p{margin:1.9rem auto 0;max-width:38rem;color:var(--brume-doux);font-size:1.08rem}
+  .hero-actions{margin-top:2.8rem;display:flex;gap:1.1rem;justify-content:center;flex-wrap:wrap}
+  .btn-or{background:linear-gradient(135deg,var(--or-clair),var(--or));color:var(--nuit);padding:1.05rem 2.2rem;border-radius:999px;font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;font-weight:500;box-shadow:0 18px 40px -14px rgba(200,161,95,.45);transition:.3s}
+  .btn-or:hover{transform:translateY(-2px);box-shadow:0 24px 48px -14px rgba(200,161,95,.55)}
+  .btn-fantome{border:1px solid rgba(234,230,218,.25);padding:1.05rem 2.2rem;border-radius:999px;font-size:.82rem;letter-spacing:.2em;text-transform:uppercase;transition:.3s}
+  .btn-fantome:hover{border-color:var(--brume)}
+  .hero-stats{margin:3.8rem auto 0;display:flex;justify-content:center;gap:clamp(2rem,6vw,4.5rem);flex-wrap:wrap}
+  .stat{text-align:center}
+  .stat b{display:block;font-family:var(--serif);font-weight:300;font-size:2.3rem;color:var(--or-clair)}
+  .stat span{font-size:.72rem;letter-spacing:.24em;text-transform:uppercase;color:var(--brume-doux)}
+
+  /* ── Filet orné ── */
+  .orne{display:flex;align-items:center;gap:1.2rem;justify-content:center;margin:0 auto}
+  .orne::before,.orne::after{content:"";height:1px;width:min(120px,20vw);background:linear-gradient(90deg,transparent,var(--carte-bord))}
+  .orne::after{background:linear-gradient(90deg,var(--carte-bord),transparent)}
+  .orne i{width:5px;height:5px;border-radius:50%;background:var(--or);transform:rotate(45deg)}
+
+  /* ── Sections ── */
+  section{padding:clamp(4rem,9vw,7rem) 0}
+  .s-titre{text-align:center;margin-bottom:clamp(2.4rem,5vw,3.8rem)}
+  .s-titre h2{font-family:var(--serif);font-weight:300;font-size:clamp(1.9rem,4vw,3rem);margin-top:1rem;line-height:1.15}
+
+  /* Techniques — 3 cartes verre */
+  .cartes-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem}
+  .carte{background:var(--carte);border:1px solid var(--carte-bord);border-radius:26px;padding:2.4rem 2rem;transition:transform .35s ease,border-color .35s ease,background .35s ease}
+  .carte:hover{transform:translateY(-6px);border-color:rgba(200,161,95,.45);background:rgba(255,255,255,.055)}
+  .carte .sigle{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;border:1px solid var(--carte-bord);font-family:var(--serif);font-style:italic;font-size:1.15rem;color:var(--or-clair);margin-bottom:1.4rem}
+  .carte h3{font-family:var(--serif);font-weight:400;font-size:1.55rem;margin-bottom:.7rem}
+  .carte p{font-size:.92rem;color:var(--brume-doux)}
+
+  /* Formules — cartes miroir */
+  .formules{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;align-items:stretch}
+  .formule{position:relative;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));border:1px solid var(--carte-bord);border-radius:30px;padding:2.6rem 2.2rem;display:flex;flex-direction:column;transition:transform .35s ease,box-shadow .35s ease}
+  .formule:hover{transform:translateY(-8px);box-shadow:0 30px 60px -30px rgba(200,161,95,.25)}
+  .formule.vedette{border-color:var(--or);background:linear-gradient(180deg,rgba(200,161,95,.10),rgba(200,161,95,.02))}
+  .formule.vedette::before{content:"La plus choisie";position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:var(--or);color:var(--nuit);font-size:.68rem;letter-spacing:.22em;text-transform:uppercase;font-weight:500;padding:.4rem 1.1rem;border-radius:999px}
+  .formule h3{font-family:var(--serif);font-weight:400;font-size:1.7rem}
+  .formule .duree{font-size:.75rem;letter-spacing:.26em;text-transform:uppercase;color:var(--brume-doux);margin-top:.4rem}
+  .formule .prix{font-family:var(--serif);font-weight:300;font-size:3rem;color:var(--or-clair);margin:1.6rem 0 1.2rem}
+  .formule .prix small{font-size:1rem;color:var(--brume-doux);font-family:var(--sans)}
+  .formule p{font-size:.92rem;color:var(--brume-doux);flex:1}
+  .formule .lien{margin-top:1.8rem;text-align:center;font-size:.8rem;letter-spacing:.22em;text-transform:uppercase;color:var(--or-clair);border-top:1px solid var(--carte-bord);padding-top:1.4rem;transition:letter-spacing .3s}
+  .formule:hover .lien{letter-spacing:.3em}
+
+  /* CTA final — panneau */
+  .finale{position:relative;border:1px solid var(--carte-bord);border-radius:34px;padding:clamp(3rem,7vw,5rem) 2rem;text-align:center;background:radial-gradient(ellipse at 50% 0%,rgba(143,172,128,.12),transparent 60%),var(--carte)}
+  .finale h2{font-family:var(--serif);font-weight:300;font-size:clamp(2rem,4.4vw,3.2rem);margin:1.1rem 0 1.2rem}
+  .finale h2 em{font-style:italic;color:var(--or-clair)}
+  .finale p{color:var(--brume-doux);margin-bottom:2.2rem}
+
+  footer{padding:2.6rem 0 3rem;display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;font-size:.78rem;color:var(--brume-doux);border-top:1px solid rgba(200,161,95,.14)}
+
+  @media (max-width:900px){
+    .cartes-3,.formules{grid-template-columns:1fr}
+    .nav-liens{display:none}
+    .formule.vedette{order:-1}
+  }
+</style>
+</head>
+<body>
+
+<div class="halo" aria-hidden="true"></div>
+
+<header>
+  <nav>
+    <div class="nav-int">
+      <a class="marque" href="#">Ventouses <em>&amp;</em> Gua&nbsp;Sha</a>
+      <div class="nav-liens"><a href="#techniques">Les gestes</a><a href="#formules">Les formules</a><a href="#reserver">Réserver</a></div>
+      <a class="nav-cta" href="#reserver">Réserver</a>
+    </div>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="conteneur">
+    <p class="etiquette">Ivry-sur-Seine · Bien-être &amp; détente</p>
+    <h1>Le corps <em>se souvient</em>,<br>la main <span class="sauge-mot">dénoue</span>.</h1>
+    <p>Ventouses sèches, Gua Sha et massage profond : des gestes séculaires, une écoute attentive, et un temps entièrement dédié à relâcher ce qui s'est accumulé.</p>
+    <div class="hero-actions">
+      <a class="btn-or" href="#reserver">Choisir un créneau</a>
+      <a class="btn-fantome" href="#techniques">Découvrir les gestes</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><b>10 ans</b><span>de pratique</span></div>
+      <div class="stat"><b>30–60 min</b><span>de séance</span></div>
+      <div class="stat"><b>24 h</b><span>annulation libre</span></div>
+    </div>
+  </div>
+</div>
+
+<section id="techniques">
+  <div class="conteneur">
+    <div class="s-titre">
+      <div class="orne"><i></i></div>
+      <h2 style="margin-top:1.4rem">Trois gestes qui se répondent</h2>
+    </div>
+    <div class="cartes-3">
+      <article class="carte">
+        <div class="sigle">I</div>
+        <h3>Les ventouses</h3>
+        <p>Une aspiration douce qui soulève la peau, décolle les tissus et réveille la circulation locale — posée quelques minutes ou glissant lentement le long du dos.</p>
+      </article>
+      <article class="carte">
+        <div class="sigle">II</div>
+        <h3>Le Gua Sha</h3>
+        <p>Un outil lisse passé sur la peau huilée, pression régulière et geste lent, là où les ventouses atteignent mal : nuque, épaules, avant-bras.</p>
+      </article>
+      <article class="carte">
+        <div class="sigle">III</div>
+        <h3>Le Theragun PRO</h3>
+        <p>Quelques minutes de percussions sur le muscle avant la pose : les fibres se relâchent en surface et l'aspiration devient immédiatement plus confortable.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="formules">
+  <div class="conteneur">
+    <div class="s-titre">
+      <div class="orne"><i></i></div>
+      <h2 style="margin-top:1.4rem">Trois façons de venir</h2>
+    </div>
+    <div class="formules">
+      <article class="formule">
+        <h3>Ventouses ciblées</h3>
+        <div class="duree">30 minutes</div>
+        <div class="prix">60&nbsp;<small>€</small></div>
+        <p>Une zone précise — nuque, bas du dos, mollets. Pistolet puis 4 à 8 ventouses sur les points de tension. Le format direct.</p>
+        <div class="lien">Réserver</div>
+      </article>
+      <article class="formule vedette">
+        <h3>Ventouses &amp; Gua&nbsp;Sha</h3>
+        <div class="duree">60 minutes</div>
+        <div class="prix">90&nbsp;<small>€</small></div>
+        <p>Les deux techniques réunies : échange initial, vrai passage de Gua Sha, 10 à 20 ventouses au repos sous couverture chauffante, modelage final.</p>
+        <div class="lien">Réserver</div>
+      </article>
+      <article class="formule">
+        <h3>Gua Sha corporel</h3>
+        <div class="duree">30 minutes</div>
+        <div class="prix">60&nbsp;<small>€</small></div>
+        <p>Sans aspiration : le travail à l'outil le long des fibres musculaires, puis un baume chauffant sur la peau réchauffée.</p>
+        <div class="lien">Réserver</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="reserver">
+  <div class="conteneur">
+    <div class="finale">
+      <p class="etiquette">Réservation en ligne</p>
+      <h2>Offrez-vous ce <em>temps</em>.</h2>
+      <p>Annulation libre jusqu'à 24&nbsp;h avant · Première séance : 15 minutes offertes</p>
+      <a class="btn-or" href="#">Voir les créneaux disponibles</a>
+    </div>
+  </div>
+</section>
+
+<footer class="conteneur">
+  <span>Centre paramédical Place Badi — 105 avenue Georges Gosnat, Ivry-sur-Seine</span>
+  <span>Maquette 2 « Nocturne » · ambiance spa premium</span>
+</footer>
+
+</body>
+</html>

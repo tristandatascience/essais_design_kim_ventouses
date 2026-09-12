@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maquette 1 · Papier — Ventouses & Gua Sha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --papier:#f7f4ed; --papier-2:#f1ecdf; --encre:#26241e; --encre-doux:#6b675c;
+    --terra:#9a5b3c; --terra-pale:#e8d9cd; --filet:#ddd5c3; --sauge:#7d8f6d;
+    --serif:"Fraunces",Georgia,serif; --sans:"Inter",system-ui,sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{background:var(--papier);color:var(--encre);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .conteneur{max-width:1120px;margin:0 auto;padding:0 clamp(1.25rem,4vw,2.5rem)}
+  .etiquette{font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;font-weight:600;color:var(--terra)}
+  .filet{border:none;border-top:1px solid var(--filet)}
+
+  /* ── Nav ── */
+  header nav{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--papier) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--filet)}
+  .nav-int{max-width:1120px;margin:0 auto;padding:1.1rem clamp(1.25rem,4vw,2.5rem);display:flex;justify-content:space-between;align-items:center}
+  .marque{font-family:var(--serif);font-size:1.2rem;font-style:italic;font-weight:400}
+  .marque em{color:var(--terra)}
+  .nav-liens{display:flex;gap:2rem;font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;color:var(--encre-doux)}
+  .nav-liens a{transition:color .2s}
+  .nav-liens a:hover{color:var(--terra)}
+  .nav-cta{font-size:.78rem;letter-spacing:.14em;text-transform:uppercase;border:1px solid var(--encre);padding:.6rem 1.3rem;border-radius:999px;transition:.25s}
+  .nav-cta:hover{background:var(--encre);color:var(--papier)}
+
+  /* ── Hero ── */
+  .hero{padding:clamp(4rem,9vw,7.5rem) 0 clamp(3rem,6vw,5rem);position:relative;overflow:hidden}
+  .hero::before{content:"";position:absolute;top:-20%;right:-10%;width:520px;height:520px;border-radius:50%;
+    background:radial-gradient(circle at 35% 35%, var(--terra-pale), transparent 70%);pointer-events:none}
+  .hero-grille{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,4fr);gap:clamp(2rem,5vw,4.5rem);align-items:end}
+  .hero h1{font-family:var(--serif);font-weight:300;font-size:clamp(2.9rem,7.2vw,5.6rem);line-height:1.02;letter-spacing:-.015em}
+  .hero h1 em{font-style:italic;color:var(--terra);font-weight:400}
+  .hero p.chapeau{margin-top:1.8rem;max-width:34rem;color:var(--encre-doux);font-size:1.06rem}
+  .hero-actions{margin-top:2.4rem;display:flex;gap:1rem;flex-wrap:wrap}
+  .btn-plein{background:var(--encre);color:var(--papier);padding:1rem 1.9rem;border-radius:999px;font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;transition:.25s}
+  .btn-plein:hover{background:var(--terra)}
+  .btn-filet{border:1px solid var(--filet);padding:1rem 1.9rem;border-radius:999px;font-size:.8rem;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--encre-doux);transition:.25s}
+  .btn-filet:hover{border-color:var(--encre);color:var(--encre)}
+  .hero-note{border-left:1px solid var(--filet);padding-left:1.6rem}
+  .hero-note .grand{font-family:var(--serif);font-size:clamp(2.6rem,4vw,3.6rem);font-weight:300;line-height:1}
+  .hero-note .grand small{font-size:1rem;color:var(--encre-doux);font-family:var(--sans)}
+  .hero-note p{margin-top:.7rem;font-size:.85rem;color:var(--encre-doux)}
+
+  /* ── Bandeau défilant ── */
+  .bandeau{border-top:1px solid var(--filet);border-bottom:1px solid var(--filet);overflow:hidden;padding:.8rem 0;background:var(--papier-2)}
+  .bandeau-int{display:flex;gap:3rem;white-space:nowrap;animation:defile 26s linear infinite;font-family:var(--serif);font-style:italic;font-size:1.02rem;color:var(--encre-doux)}
+  .bandeau-int span::after{content:"·";margin-left:3rem;color:var(--terra)}
+  @keyframes defile{to{transform:translateX(-50%)}}
+
+  /* ── Techniques ── */
+  section{padding:clamp(3.5rem,8vw,6.5rem) 0}
+  .s-titre{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;margin-bottom:clamp(2rem,4vw,3.2rem)}
+  .s-titre h2{font-family:var(--serif);font-weight:400;font-size:clamp(1.7rem,3.4vw,2.5rem);line-height:1.12;max-width:22ch}
+  .techniques{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1px solid var(--filet)}
+  .tech{padding:2.2rem 2rem 2.6rem 0;border-bottom:1px solid var(--filet);position:relative}
+  .tech + .tech{padding-left:2rem;border-left:1px solid var(--filet)}
+  .tech .num{font-family:var(--serif);font-style:italic;font-size:.95rem;color:var(--terra)}
+  .tech h3{font-family:var(--serif);font-weight:500;font-size:1.45rem;margin:.7rem 0 .8rem}
+  .tech p{font-size:.92rem;color:var(--encre-doux)}
+
+  /* ── Formules éditoriales ── */
+  .formules{border-top:1px solid var(--filet)}
+  .formule{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,2fr) auto;gap:clamp(1rem,3vw,2.5rem);align-items:baseline;padding:2rem 0;border-bottom:1px solid var(--filet);transition:padding-left .3s ease}
+  .formule:hover{padding-left:1rem}
+  .formule:hover .f-nom{color:var(--terra)}
+  .f-nom{font-family:var(--serif);font-weight:400;font-size:clamp(1.4rem,2.6vw,2rem);transition:color .25s}
+  .f-desc{font-size:.92rem;color:var(--encre-doux);max-width:44ch}
+  .f-prix{text-align:right}
+  .f-prix .montant{font-family:var(--serif);font-size:1.7rem;font-weight:300}
+  .f-prix .duree{display:block;font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;color:var(--encre-doux);margin-top:.2rem}
+  .f-note{margin-top:1.6rem;font-size:.85rem;color:var(--encre-doux);font-style:italic;font-family:var(--serif)}
+
+  /* ── CTA ── */
+  .cta{background:var(--encre);color:var(--papier);text-align:center}
+  .cta .etiquette{color:var(--terra-pale)}
+  .cta h2{font-family:var(--serif);font-weight:300;font-size:clamp(2rem,4.6vw,3.4rem);margin:1rem auto 1.4rem;max-width:20ch;line-height:1.15}
+  .cta h2 em{font-style:italic;color:var(--terra-pale)}
+  .cta .btn-plein{background:var(--papier);color:var(--encre)}
+  .cta .btn-plein:hover{background:var(--terra);color:var(--papier)}
+  .cta p{margin-top:1.2rem;font-size:.85rem;color:color-mix(in srgb,var(--papier) 60%,transparent)}
+
+  footer{padding:2.5rem 0;font-size:.78rem;color:var(--encre-doux);display:flex;justify-content:space-between;gap:1rem;flex-wrap:wrap;border-top:1px solid var(--filet)}
+
+  @media (max-width:860px){
+    .hero-grille{grid-template-columns:1fr}
+    .hero-note{border-left:none;padding-left:0;border-top:1px solid var(--filet);padding-top:1.4rem}
+    .techniques{grid-template-columns:1fr}
+    .tech + .tech{padding-left:0;border-left:none}
+    .formule{grid-template-columns:1fr auto}
+    .f-desc{grid-column:1/-1}
+    .nav-liens{display:none}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav>
+    <div class="nav-int">
+      <a class="marque" href="#">Ventouses <em>&amp;</em> Gua&nbsp;Sha</a>
+      <div class="nav-liens"><a href="#techniques">Les gestes</a><a href="#formules">Les formules</a><a href="#reserver">Réserver</a></div>
+      <a class="nav-cta" href="#reserver">Voir les créneaux</a>
+    </div>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="conteneur hero-grille">
+    <div>
+      <p class="etiquette">Ivry-sur-Seine · Centre paramédical Place Badi</p>
+      <h1>Relâcher<br>ce qui <em>s'accumule</em>,<br>geste après geste.</h1>
+      <p class="chapeau">Ventouses posées à sec, Gua Sha sur peau huilée, pistolet de massage : un temps de détente ancestral, choisi ensemble selon ce que votre corps demande ce jour-là.</p>
+      <div class="hero-actions">
+        <a class="btn-plein" href="#reserver">Réserver une séance</a>
+        <a class="btn-filet" href="#formules">Découvrir les formules</a>
+      </div>
+    </div>
+    <aside class="hero-note">
+      <div class="grand">30<small> min</small></div>
+      <p>Sans téléphone, sans bruit. Le format court d'un vrai temps pour soi — ou 60 minutes pour explorer les deux techniques.</p>
+    </aside>
+  </div>
+</div>
+
+<div class="bandeau" aria-hidden="true">
+  <div class="bandeau-int">
+    <span>Ventouses sèches</span><span>Gua Sha</span><span>Pistolet Theragun PRO</span><span>Détente profonde</span><span>Ivry-sur-Seine</span>
+    <span>Ventouses sèches</span><span>Gua Sha</span><span>Pistolet Theragun PRO</span><span>Détente profonde</span><span>Ivry-sur-Seine</span>
+  </div>
+</div>
+
+<section id="techniques">
+  <div class="conteneur">
+    <div class="s-titre">
+      <h2>Trois gestes, une même intention : relâcher.</h2>
+      <span class="etiquette">Les techniques</span>
+    </div>
+    <div class="techniques">
+      <article class="tech">
+        <span class="num">No 01</span>
+        <h3>Les ventouses</h3>
+        <p>Cloches de verre ou de silicone posées à sec, quelques minutes ou glissant lentement : la peau se soulève, les tissus se décollent, la circulation locale se réveille.</p>
+      </article>
+      <article class="tech">
+        <span class="num">No 02</span>
+        <h3>Le Gua Sha</h3>
+        <p>Un outil lisse — pierre ou corne — passé sur la peau huilée, avec une pression régulière et lente. Il prolonge le travail des ventouses sur nuque, épaules et avant-bras.</p>
+      </article>
+      <article class="tech">
+        <span class="num">No 03</span>
+        <h3>Le pistolet de massage</h3>
+        <p>Un Theragun PRO, quelques minutes avant la pose : des percussions rapides sur le muscle — jamais sur les os — pour relâcher les fibres en surface.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="formules">
+  <div class="conteneur">
+    <div class="s-titre">
+      <h2>Trois façons de venir.</h2>
+      <span class="etiquette">Les formules</span>
+    </div>
+    <div class="formules">
+      <a class="formule" href="#reserver">
+        <h3 class="f-nom">Ventouses ciblées</h3>
+        <p class="f-desc">Une seule zone — nuque, bas du dos, mollets. Pistolet puis 4 à 8 ventouses sur les points de tension. Le format direct.</p>
+        <div class="f-prix"><span class="montant">60&nbsp;€</span><span class="duree">30 minutes</span></div>
+      </a>
+      <a class="formule" href="#reserver">
+        <h3 class="f-nom">Ventouses &amp; Gua&nbsp;Sha</h3>
+        <p class="f-desc">Les deux techniques réunies : échange initial, Gua Sha sur peau huilée, 10 à 20 ventouses au repos, modelage de récupération.</p>
+        <div class="f-prix"><span class="montant">90&nbsp;€</span><span class="duree">60 minutes</span></div>
+      </a>
+      <a class="formule" href="#reserver">
+        <h3 class="f-nom">Gua Sha corporel</h3>
+        <p class="f-desc">Sans ventouses, sans aspiration. Le travail à l'outil le long des fibres, puis un baume chauffant. La porte d'entrée en douceur.</p>
+        <div class="f-prix"><span class="montant">60&nbsp;€</span><span class="duree">30 minutes</span></div>
+      </a>
+    </div>
+    <p class="f-note">Première séance : 15 minutes offertes pour remplir le questionnaire ensemble. Forfaits 3 séances valables 6 mois.</p>
+  </div>
+</section>
+
+<section class="cta" id="reserver">
+  <div class="conteneur">
+    <p class="etiquette">Réservation en ligne</p>
+    <h2>Choisissez votre <em>créneau</em>.</h2>
+    <a class="btn-plein" href="#">Voir les créneaux disponibles</a>
+    <p>Annulation libre jusqu'à 24&nbsp;h avant · Confirmation par e-mail</p>
+  </div>
+</section>
+
+<footer class="conteneur">
+  <span>Centre paramédical Place Badi — 105 avenue Georges Gosnat, Ivry-sur-Seine</span>
+  <span>Maquette 1 « Papier » · direction éditoriale lumineuse</span>
+</footer>
+
+</body>
+</html>
