@@ -152,8 +152,6 @@ html{scroll-padding-top:var(--header-offset)}
 .service::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;
   background:radial-gradient(120% 90% at 50% 0%,#a4604214 0%,transparent 55%);
   transition:opacity .5s ease}
-.service::before{content:"";position:absolute;top:0;left:0;height:2px;width:0;background:var(--accent);
-  transition:width .5s cubic-bezier(.22,1,.36,1)}
 .service .service-top>span:first-child{transition:color .35s,transform .35s cubic-bezier(.22,1,.36,1)}
 .service h3{transition:transform .4s cubic-bezier(.22,1,.36,1)}
 .service .service-price{transition:border-color .4s}
@@ -161,17 +159,15 @@ html{scroll-padding-top:var(--header-offset)}
 .service p{transition:transform .45s cubic-bezier(.22,1,.36,1)}
 .js-motion .service{transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s ease}
 .service-featured::after{background:radial-gradient(120% 90% at 50% 0%,#d0d9b71f 0%,transparent 55%)}
-.service-featured::before{background:#d0d9b7}
 
-.service.survol{box-shadow:0 34px 64px -22px rgba(23,44,35,.34)}
+.service.survol{box-shadow:0 42px 76px -24px rgba(23,44,35,.4)}
 .service.survol::after{opacity:1}
-.service.survol::before{width:100%}
 .service.survol .service-top>span:first-child{color:var(--accent);transform:translateY(-2px)}
 .service.survol h3{transform:translateY(-4px)}
 .service.survol .service-price{border-color:#a4604255}
 .service.survol .service-price strong{transform:scale(1.05)}
 .service.survol p{transform:translateY(-2px)}
-.service-featured.survol{box-shadow:0 32px 60px -22px rgba(23,44,35,.5)}
+.service-featured.survol{box-shadow:0 40px 72px -24px rgba(23,44,35,.55)}
 .service-featured.survol .service-price{border-color:#ffffff45}
 
 /* Le reste : interactions discrètes conservées */
@@ -344,7 +340,7 @@ jQuery(function ($) {
       var r = this.getBoundingClientRect();
       var px = (e.clientX - r.left) / r.width - 0.5;
       var py = (e.clientY - r.top) / r.height - 0.5;
-      gsap.to(this, { rotateY: px * 7, rotateX: -py * 6, y: -12, scale: 1.02,
+      gsap.to(this, { rotateY: px * 9, rotateX: -py * 8, y: -16, scale: 1.03,
         transformPerspective: 900, duration: 0.5, ease: "power2.out" });
     });
     jQuery(".service").on("mouseleave", function () {
