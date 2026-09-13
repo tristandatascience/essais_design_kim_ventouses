@@ -139,63 +139,91 @@ html{scroll-padding-top:var(--header-offset)}
 
 
 <style id="micro-interactions">
-/* ── Micro-interactions au survol (CSS pur, maquette 4) ── */
+/* ── Micro-interactions v2 — orchestrées par jQuery, animées par CSS ── */
 
-/* Menu : soulignement qui glisse depuis la gauche */
-.header nav a{position:relative;color:inherit;transition:color .25s}
-.header nav a::after{content:"";position:absolute;left:0;right:0;bottom:5px;height:1px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .32s cubic-bezier(.22,1,.36,1)}
+/* Menu : la ligne magique est un élément unique déplacé par jQuery */
+.header nav{position:relative}
+.nav-ligne{position:absolute;height:2px;background:var(--accent);border-radius:2px;opacity:0;pointer-events:none;bottom:4px;box-shadow:0 1px 0 #a4604233}
+.header nav a{transition:color .25s}
 .header nav a:hover{color:var(--accent)}
-.header nav a:hover::after{transform:scaleX(1)}
 
-/* Tuiles services : élévation + filet d'accent qui s'étire en tête */
-.js-motion .service{transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s}
-.service{position:relative}
-.service::before{content:"";position:absolute;top:0;left:0;height:1px;width:0;background:var(--accent);transition:width .45s cubic-bezier(.22,1,.36,1)}
-.service:hover{transform:translateY(-6px);box-shadow:0 22px 44px -18px rgba(23,44,35,.22)}
-.service:hover::before{width:100%}
-.service:hover h3 em{color:var(--ink)}
-.js-motion .service-featured{transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s}
-.service-featured:hover{transform:translateY(-6px);box-shadow:0 26px 50px -18px rgba(23,44,35,.42)}
+/* Tuiles prestations : séquence complète au survol (classe .survol posée par jQuery) */
+.service{position:relative;overflow:hidden}
+.service::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:0;
+  background:radial-gradient(120% 90% at 50% 0%,#a4604214 0%,transparent 55%);
+  transition:opacity .5s ease}
+.service::before{content:"";position:absolute;top:0;left:0;height:2px;width:0;background:var(--accent);
+  transition:width .5s cubic-bezier(.22,1,.36,1)}
+.service .service-top>span:first-child{transition:color .35s,transform .35s cubic-bezier(.22,1,.36,1)}
+.service h3{transition:transform .4s cubic-bezier(.22,1,.36,1)}
+.service .service-price{transition:border-color .4s}
+.service .service-price strong{display:inline-block;transition:transform .4s cubic-bezier(.22,1,.36,1)}
+.service p{transition:transform .45s cubic-bezier(.22,1,.36,1)}
+.js-motion .service{transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s ease}
+.service-featured::after{background:radial-gradient(120% 90% at 50% 0%,#d0d9b71f 0%,transparent 55%)}
 .service-featured::before{background:#d0d9b7}
 
-/* Réservation rapide : la flèche avance, la carte s'incline à peine */
-.js-motion .quick-book{transition:background .2s,border-color .2s,transform .3s cubic-bezier(.22,1,.36,1)}
-.quick-book:hover{transform:translateX(4px)}
-.quick-book .quick-action>span{display:inline-block;transition:transform .3s cubic-bezier(.22,1,.36,1)}
-.quick-book:hover .quick-action>span{transform:translateX(5px)}
+.service.survol{transform:translateY(-10px);box-shadow:0 28px 52px -20px rgba(23,44,35,.28)}
+.service.survol::after{opacity:1}
+.service.survol::before{width:100%}
+.service.survol .service-top>span:first-child{color:var(--accent);transform:translateY(-2px)}
+.service.survol h3{transform:translateY(-3px)}
+.service.survol .service-price{border-color:#a4604255}
+.service.survol .service-price strong{transform:scale(1.05)}
+.service.survol p{transform:translateY(-2px)}
+.service-featured.survol{box-shadow:0 32px 60px -22px rgba(23,44,35,.5)}
+.service-featured.survol .service-price{border-color:#ffffff45}
 
-/* Avis clientes : élévation + guillemet qui se réchauffe */
-.js-motion .review-card{transition:transform .35s cubic-bezier(.22,1,.36,1),border-color .35s,box-shadow .35s}
-.review-card:hover{transform:translateY(-5px);border-color:#a4604266;box-shadow:0 20px 40px -18px rgba(23,44,35,.18)}
-.review-card .review-quote{transition:color .35s}
-.review-card:hover .review-quote{color:var(--accent)}
-
-/* Étapes du déroulé : numéro terracotta + titre qui respire */
-.js-motion .journey-steps article{transition:padding-left .3s cubic-bezier(.22,1,.36,1)}
+/* Le reste : interactions discrètes conservées */
+.journey-steps article{transition:padding-left .3s cubic-bezier(.22,1,.36,1)}
 .journey-steps article:hover{padding-left:6px}
 .journey-steps article>span{transition:color .3s}
 .journey-steps article:hover>span{color:var(--accent)}
-
-/* FAQ : question qui se teinte, icône qui s'anime */
 .faq-list summary{transition:color .25s}
 .faq-list summary:hover{color:var(--accent)}
 .faq-list summary span{transition:transform .25s,color .25s}
 .faq-list summary:hover span{color:var(--accent)}
-
-/* Boutons : légère élévation */
 .js-motion .button,.js-motion .chat-book{transition:background .2s,transform .25s cubic-bezier(.22,1,.36,1),box-shadow .25s}
 .button:hover,.chat-book:hover{transform:translateY(-2px);box-shadow:0 12px 26px -12px rgba(23,44,35,.35)}
-
-/* Liens à flèche (contact, poser une question) : la flèche glisse */
 .contact-link>span,.ask-lumi>span{display:inline-block;transition:transform .3s cubic-bezier(.22,1,.36,1)}
 .contact-link:hover>span,.ask-lumi:hover>span{transform:translateX(6px)}
-
-/* Raison d'une visite : tiret qui s'allonge */
 .visit-reasons li{transition:padding-left .28s cubic-bezier(.22,1,.36,1)}
 .visit-reasons li:hover{padding-left:32px}
 .visit-reasons li:before{transition:color .28s}
 .visit-reasons li:hover:before{color:var(--ink)}
 </style>
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+/* Orchestration jQuery : ligne magique du menu + classe .survol des tuiles */
+jQuery(function ($) {
+  "use strict";
+  var reduit = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduit) return;
+
+  /* Ligne magique du menu */
+  var nav = $(".header nav");
+  if (nav.length && nav.find("a").length) {
+    var ligne = $('<span class="nav-ligne"/>').appendTo(nav);
+    var liens = nav.find("a");
+
+    function place(el) {
+      if (!el || !el.length) { ligne.stop(true).animate({ opacity: 0 }, 180); return; }
+      var p = el.position();
+      ligne.stop(true, true)
+        .css("top", p.top + el.outerHeight() + 10)
+        .animate({ left: p.left, width: el.outerWidth(), opacity: 1 }, 340);
+    }
+
+    liens.on("mouseenter", function () { place($(this)); });
+    nav.on("mouseleave leave", function () { ligne.stop(true).animate({ opacity: 0 }, 240); });
+    $(window).on("resize", function () { ligne.css({ left: 0, width: 0 }); });
+  }
+
+  /* Tuiles prestations : la classe .survol déclenche la séquence CSS */
+  $(".service").on("mouseenter", function () { $(this).addClass("survol"); })
+               .on("mouseleave", function () { $(this).removeClass("survol"); });
+});
+</script>
 <script>
 /* ── Couche d'animations — JS vanilla, zéro dépendance (maquette 4) ── */
 (function () {
