@@ -14,6 +14,7 @@ export default defineConfig({
         maquette1: resolve(racine, "maquette-1.html"),
         maquette2: resolve(racine, "maquette-2.html"),
         maquette3: resolve(racine, "maquette-3.html"),
+        maquette4: resolve(racine, "maquette-4.html"),
       },
     },
   },

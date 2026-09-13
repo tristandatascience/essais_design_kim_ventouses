@@ -26,7 +26,7 @@
   .entete p.sous{color:var(--doux);max-width:56ch;font-weight:300}
   .filet{height:1px;background:linear-gradient(90deg,transparent,#00000015,transparent);border:none;margin:2.6rem 0 3.4rem}
 
-  .grille{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;padding-bottom:1rem}
+  .grille{display:grid;grid-template-columns:repeat(2,1fr);gap:1.4rem;padding-bottom:1rem}
   .carte{position:relative;border-radius:24px;overflow:hidden;background:var(--creme);border:1px solid #18201714;display:flex;flex-direction:column;transition:transform .4s cubic-bezier(.22,1,.36,1),box-shadow .4s ease}
   .carte:hover{transform:translateY(-7px);box-shadow:0 30px 60px -28px rgba(24,32,23,.3)}
   .apercu{height:210px;position:relative;overflow:hidden}
@@ -49,6 +49,11 @@
   .m3 .voile{background:linear-gradient(180deg,rgba(242,238,226,.85) 0%,rgba(242,238,226,.15) 45%,rgba(24,32,23,.2) 55%,rgba(18,26,17,.85) 100%)}
   .m3 .mini-titre{color:#ece8db}
   .m3 .num{background:#93a987;color:#121a11}
+  /* Héritage : tons papier/encre de la V04 */
+  .m4 img{object-position:center 30%}
+  .m4 .voile{background:linear-gradient(180deg,rgba(42,60,51,.15),rgba(42,60,51,.05) 40%,rgba(21,32,26,.72));backdrop-filter:saturate(.9)}
+  .m4 .mini-titre{color:#f3f0e7}
+  .m4 .num{background:#a46042;color:#f3f0e7}
 
   .corps{padding:1.5rem 1.5rem 1.7rem;display:flex;flex-direction:column;flex:1}
   .corps h2{font-weight:600;font-size:1.16rem;color:var(--forest);letter-spacing:-.01em}
@@ -137,9 +142,29 @@
       </div>
     </a>
 
+    <a class="carte m4" href="maquette-4.html">
+      <div class="apercu">
+        <img src="/assets/rituel-ventouses.png" alt="">
+        <div class="voile"></div>
+        <span class="num">Nº 4</span>
+        <span class="mini-titre">Un temps pour vous,<br>avec Kim</span>
+      </div>
+      <div class="corps">
+        <h2>Héritage — la page V04 animée</h2>
+        <p>La page complète fournie (V04, Fraunces + Manrope), enrichie d'une couche d'animations JS vanilla : révélations en cascade, parallaxe, sculpture générative sur canvas, concierge fonctionnel.</p>
+        <div class="nuancier" aria-hidden="true">
+          <span class="pastille" style="background:#f3f0e7"></span>
+          <span class="pastille" style="background:#2a3c33"></span>
+          <span class="pastille" style="background:#a46042"></span>
+          <span class="pastille" style="background:#63806b"></span>
+        </div>
+        <span class="ouvrir">Ouvrir la maquette →</span>
+      </div>
+    </a>
+
   </div>
 
-  <p class="note"><b>Pour lancer en local :</b> <code>docker compose up</code> puis ouvrir <code>http://localhost:5173</code>. Toutes les maquettes partagent la photo de séance et les animations de défilement (GSAP + Lenis). La maquette retenue servira de base au site final.</p>
+  <p class="note"><b>Pour lancer en local :</b> <code>docker compose -f docker-compose.dev.yml up</code> puis ouvrir <code>http://localhost:5173</code> (les maquettes 1 à 4 s'ouvrent aussi en double-cliquant sur le fichier). Toutes partagent animations de défilement et légèreté. La maquette retenue servira de base au site final.</p>
 </main>
 
 <footer class="c">
