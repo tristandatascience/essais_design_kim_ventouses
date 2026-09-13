@@ -192,6 +192,13 @@ html{scroll-padding-top:var(--header-offset)}
 .visit-reasons li:before{transition:color .28s}
 .visit-reasons li:hover:before{color:var(--ink)}
 </style>
+<style id="tuiles-v2">
+/* Tuiles v2 — vraies cartes séparées, padding confortable */
+.service-grid{gap:22px;border-top:0;border-bottom:0}
+.service,.service:first-child,.service:last-child{border:1px solid #2a3c3330;border-radius:14px;background:#fffdf7;padding:34px 32px 36px;margin:0}
+.service-featured{margin:0;padding-top:36px;padding-bottom:38px;box-shadow:0 18px 34px -22px #172c2333}
+@media(max-width:760px){.service-grid{gap:17px}.service,.service:first-child,.service:last-child{padding:24px 22px 26px;border-radius:12px}.service-featured{padding:26px 22px!important}}
+</style>
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script>
 /* Orchestration jQuery : ligne magique du menu + classe .survol des tuiles */
@@ -271,7 +278,7 @@ jQuery(function ($) {
   /* Entrée du héro, séquencée */
   var heroEnfants = document.querySelectorAll(".hero-copy > *");
   if (heroEnfants.length) {
-    gsap.set(heroEnfants, { autoAlpha: 0, y: 34, filter: "blur(6px)" });
+    gsap.set(heroEnfants, { autoAlpha: 0, y: 34, filter: "blur(4px)" });
     gsap.to(heroEnfants, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1, stagger: 0.11, ease: "power3.out", delay: 0.15 });
   }
 
@@ -294,7 +301,7 @@ jQuery(function ($) {
     opts = opts || {};
     var els = gsap.utils.toArray(selecteur);
     if (!els.length) return;
-    gsap.set(els, { autoAlpha: 0, y: opts.y || 46, filter: "blur(5px)", scale: opts.scale || 1 });
+    gsap.set(els, { autoAlpha: 0, y: opts.y || 46, filter: "blur(3px)", scale: opts.scale || 1 });
     ScrollTrigger.batch(els, {
       start: "top 88%", once: true,
       onEnter: function (lot) {
