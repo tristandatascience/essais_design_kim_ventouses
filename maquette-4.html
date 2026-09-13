@@ -144,7 +144,7 @@ html{scroll-padding-top:var(--header-offset)}
 /* Menu : la ligne magique est un élément unique déplacé par jQuery */
 .header nav{position:relative}
 .nav-ligne{position:absolute;height:2px;background:var(--accent);border-radius:2px;opacity:0;pointer-events:none;bottom:4px;box-shadow:0 1px 0 #a4604233}
-.header nav a{transition:color .25s}
+.header nav a{border-bottom-color:transparent!important;transition:color .25s}
 .header nav a:hover{color:var(--accent)}
 
 /* Tuiles prestations : séquence complète au survol (classe .survol posée par jQuery) */
@@ -163,11 +163,11 @@ html{scroll-padding-top:var(--header-offset)}
 .service-featured::after{background:radial-gradient(120% 90% at 50% 0%,#d0d9b71f 0%,transparent 55%)}
 .service-featured::before{background:#d0d9b7}
 
-.service.survol{transform:translateY(-10px);box-shadow:0 28px 52px -20px rgba(23,44,35,.28)}
+.service.survol{box-shadow:0 34px 64px -22px rgba(23,44,35,.34)}
 .service.survol::after{opacity:1}
 .service.survol::before{width:100%}
 .service.survol .service-top>span:first-child{color:var(--accent);transform:translateY(-2px)}
-.service.survol h3{transform:translateY(-3px)}
+.service.survol h3{transform:translateY(-4px)}
 .service.survol .service-price{border-color:#a4604255}
 .service.survol .service-price strong{transform:scale(1.05)}
 .service.survol p{transform:translateY(-2px)}
@@ -224,147 +224,30 @@ jQuery(function ($) {
                .on("mouseleave", function () { $(this).removeClass("survol"); });
 });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.4/dist/lenis.min.js"></script>
 <script>
-/* ── Couche d'animations — JS vanilla, zéro dépendance (maquette 4) ── */
+/* ── Couche d'animations v3 — GSAP + ScrollTrigger + Lenis (jQuery pour le survol) ── */
 (function () {
   "use strict";
   var reduit = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  /* 1. Active le système de révélations prévu par le CSS */
   document.documentElement.classList.add("js-motion");
 
-  function toutMontrer() {
-    document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("visible"); });
-  }
-  if (reduit || !("IntersectionObserver" in window)) { toutMontrer(); }
-
-  if (!reduit && "IntersectionObserver" in window) {
-    /* 2. Étend les révélations aux blocs structurants */
-    document.querySelectorAll(
-      ".eyebrow, .section-heading, .intro-note, .intro-statement h2, " +
-      ".service, .journey-steps article, .review-card, .visit-details, " +
-      ".faq-list details, .before-booking p, .discovery-copy, " +
-      ".reasons-panel, .quick-book, .immersive-copy, .immersive-bottom, " +
-      ".footer-top, .booking h2, .booking .button, .sessions-bottom"
-    ).forEach(function (el) { el.classList.add("reveal"); });
-
-    /* 3. Cascade dans les grilles */
-    document.querySelectorAll(".service-grid, .journey-steps, .reviews-grid, .quick-bookings").forEach(function (g) {
-      Array.prototype.forEach.call(g.children, function (enfant, i) {
-        enfant.style.transitionDelay = Math.min(i * 90, 360) + "ms";
-      });
-    });
-
-    /* 4. Entrée du héro au chargement */
-    var hero = document.querySelector(".hero-copy");
-    if (hero) {
-      Array.prototype.forEach.call(hero.children, function (el, i) {
-        el.classList.add("reveal");
-        el.style.transitionDelay = (i * 110) + "ms";
-        requestAnimationFrame(function () { requestAnimationFrame(function () { el.classList.add("visible"); }); });
-      });
-    }
-
-    /* 5. Observateur de révélation */
-    var obs = new IntersectionObserver(function (entrees) {
-      entrees.forEach(function (e) {
-        if (e.isIntersecting) { e.target.classList.add("visible"); obs.unobserve(e.target); }
-      });
-    }, { rootMargin: "0px 0px -8% 0px", threshold: 0.08 });
-    document.querySelectorAll(".reveal").forEach(function (el) {
-      var r = el.getBoundingClientRect();
-      if (r.top < window.innerHeight * 0.92) { el.classList.add("visible"); } else { obs.observe(el); }
+  /* Concierge (dialog native) — actif même sans animations */
+  var lanceur = document.querySelector(".concierge-launcher");
+  var fenetre = document.querySelector(".concierge-dialog");
+  if (lanceur && fenetre && typeof fenetre.showModal === "function") {
+    lanceur.addEventListener("click", function () { fenetre.showModal(); document.body.classList.add("chat-open"); });
+    fenetre.addEventListener("close", function () { document.body.classList.remove("chat-open"); });
+    fenetre.querySelectorAll(".chat-icon-button").forEach(function (b) { b.addEventListener("click", function () { fenetre.close(); }); });
+    var champ = fenetre.querySelector(".chat-composer input");
+    fenetre.querySelectorAll(".chat-suggestions button").forEach(function (b) {
+      b.addEventListener("click", function () { if (champ) { champ.value = b.textContent.trim(); champ.focus(); } });
     });
   }
 
-  /* 6. Parallaxe douce de la photo héro */
-  var imgHero = document.querySelector(".hero-photo img");
-  var cadreHero = document.querySelector(".hero-photo");
-  if (imgHero && cadreHero && !reduit) {
-    imgHero.style.willChange = "transform";
-    var attente = false;
-    function applique() {
-      var r = cadreHero.getBoundingClientRect();
-      if (r.bottom > 0 && r.top < window.innerHeight) {
-        var p = Math.max(-1, Math.min(1, (r.top + r.height / 2 - window.innerHeight / 2) / window.innerHeight));
-        imgHero.style.transform = "translateY(" + (p * -5).toFixed(2) + "%) scale(1.12)";
-      }
-      attente = false;
-    }
-    window.addEventListener("scroll", function () {
-      if (attente) return;
-      attente = true;
-      requestAnimationFrame(applique);
-    }, { passive: true });
-    requestAnimationFrame(applique);
-  }
-
-  /* 7. Sculpture générative de la section réservation (canvas créé ici) */
-  var immersive = document.querySelector(".booking");
-  if (immersive && !reduit) {
-    var styleS = document.createElement("style");
-    styleS.textContent = ".booking{position:relative;overflow:hidden}" +
-      ".booking>.sculpture{position:absolute;inset:0;z-index:0;pointer-events:none}" +
-      ".booking>*:not(.sculpture){position:relative;z-index:1}";
-    document.head.appendChild(styleS);
-    var support = document.createElement("div");
-    support.className = "sculpture";
-    var canvas = document.createElement("canvas");
-    support.appendChild(canvas);
-    immersive.insertBefore(support, immersive.firstChild);
-
-    var ctx = canvas.getContext("2d");
-    var W, H, actif = false;
-    function dimensionner() {
-      W = canvas.width = Math.max(1, Math.floor(immersive.offsetWidth / 2));
-      H = canvas.height = Math.max(1, Math.floor(immersive.offsetHeight / 2));
-      canvas.style.width = "100%"; canvas.style.height = "100%";
-    }
-    dimensionner();
-    window.addEventListener("resize", dimensionner);
-
-    var teintes = ["#426354", "#44634b", "#63806b", "#8aa58f", "#d7e1c8"];
-    var ondes = [];
-    for (var i = 0; i < 5; i++) {
-      ondes.push({
-        t: Math.random() * Math.PI * 2,
-        v: 0.0018 + Math.random() * 0.0022,
-        a: 0.05 + Math.random() * 0.045,
-        r: 0.26 + i * 0.075,
-        d: 0.10 + Math.random() * 0.08,
-        c: teintes[i % teintes.length]
-      });
-    }
-
-    function dessine(t) {
-      if (!actif) return;
-      ctx.clearRect(0, 0, W, H);
-      ctx.globalCompositeOperation = "source-over";
-      for (var i = 0; i < ondes.length; i++) {
-        var o = ondes[i];
-        o.t += o.v;
-        var cx = W * (0.5 + Math.cos(o.t * 0.9 + i) * o.d);
-        var cy = H * (0.5 + Math.sin(o.t * 0.7 + i * 1.7) * o.d);
-        var ray = Math.min(W, H) * (o.r + Math.sin(o.t * 1.3 + i) * 0.03);
-        var grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(1, ray));
-        grad.addColorStop(0, o.c + Math.round(o.a * 255).toString(16).padStart(2, "0"));
-        grad.addColorStop(1, o.c + "00");
-        ctx.fillStyle = grad;
-        ctx.beginPath();
-        ctx.arc(cx, cy, Math.max(1, ray), 0, Math.PI * 2);
-        ctx.fill();
-      }
-      requestAnimationFrame(dessine);
-    }
-
-    new IntersectionObserver(function (e) {
-      var visible = e[0].isIntersecting;
-      if (visible && !actif) { actif = true; support.classList.add("ready"); requestAnimationFrame(dessine); }
-      else if (!visible) { actif = false; }
-    }, { threshold: 0.05 }).observe(immersive);
-  }
-
-  /* 8. Barre mobile de réservation */
+  /* Barre mobile de réservation */
   var barre = document.querySelector(".mobile-book");
   if (barre) {
     var montre = false;
@@ -374,24 +257,144 @@ jQuery(function ($) {
     }, { passive: true });
   }
 
-  /* 9. Concierge : ouverture / fermeture / suggestions (dialog native) */
-  var lanceur = document.querySelector(".concierge-launcher");
-  var fenetre = document.querySelector(".concierge-dialog");
-  if (lanceur && fenetre && typeof fenetre.showModal === "function") {
-    lanceur.addEventListener("click", function () {
-      fenetre.showModal();
-      document.body.classList.add("chat-open");
+  if (reduit || !window.gsap) return;
+  gsap.registerPlugin(ScrollTrigger);
+
+  /* Défilement fluide */
+  if (window.Lenis) {
+    var lenis = new Lenis({ duration: 1.1 });
+    lenis.on("scroll", ScrollTrigger.update);
+    gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
+    gsap.ticker.lagSmoothing(0);
+  }
+
+  /* Entrée du héro, séquencée */
+  var heroEnfants = document.querySelectorAll(".hero-copy > *");
+  if (heroEnfants.length) {
+    gsap.set(heroEnfants, { autoAlpha: 0, y: 34, filter: "blur(6px)" });
+    gsap.to(heroEnfants, { autoAlpha: 1, y: 0, filter: "blur(0px)", duration: 1, stagger: 0.11, ease: "power3.out", delay: 0.15 });
+  }
+
+  /* Photo héro : rideau qui se lève + parallaxe continue */
+  var imgHero = document.querySelector(".hero-photo img");
+  var cadreHero = document.querySelector(".hero-photo");
+  if (cadreHero && imgHero) {
+    gsap.fromTo(cadreHero,
+      { clipPath: "inset(0 0 100% 0)" },
+      { clipPath: "inset(0 0 0% 0)", duration: 1.4, ease: "power4.inOut", delay: 0.25 });
+    gsap.fromTo(imgHero, { scale: 1.25 }, { scale: 1.12, duration: 1.8, ease: "power2.out", delay: 0.25 });
+    gsap.to(imgHero, {
+      yPercent: -6, ease: "none",
+      scrollTrigger: { trigger: cadreHero, start: "top top", end: "bottom top", scrub: 1.2 }
     });
-    fenetre.addEventListener("close", function () { document.body.classList.remove("chat-open"); });
-    fenetre.querySelectorAll(".chat-icon-button").forEach(function (b) {
-      b.addEventListener("click", function () { fenetre.close(); });
+  }
+
+  /* Révélations au défilement, par familles d'éléments */
+  function vague(selecteur, opts) {
+    opts = opts || {};
+    var els = gsap.utils.toArray(selecteur);
+    if (!els.length) return;
+    gsap.set(els, { autoAlpha: 0, y: opts.y || 46, filter: "blur(5px)", scale: opts.scale || 1 });
+    ScrollTrigger.batch(els, {
+      start: "top 88%", once: true,
+      onEnter: function (lot) {
+        gsap.to(lot, { autoAlpha: 1, y: 0, filter: "blur(0px)", scale: 1,
+          duration: opts.duree || 0.95, stagger: (opts.ecart !== undefined) ? opts.ecart : 0.1,
+          ease: "power3.out", overwrite: true, delay: opts.delai || 0 });
+      }
     });
-    var champ = fenetre.querySelector(".chat-composer input");
-    fenetre.querySelectorAll(".chat-suggestions button").forEach(function (b) {
-      b.addEventListener("click", function () {
-        if (champ) { champ.value = b.textContent.trim(); champ.focus(); }
-      });
+  }
+
+  vague(".section-heading, .intro-note, .intro-statement h2, .discovery-copy, .reasons-panel", { y: 40, ecart: 0.08 });
+  vague(".service", { y: 70, scale: 0.94, ecart: 0.14, duree: 1.05 });
+  vague(".journey-steps article", { y: 54, ecart: 0.13 });
+  vague(".faq-list details, .before-booking p, .visit-details, .visit-reasons li", { y: 30, ecart: 0.06 });
+  vague(".booking h2, .booking .eyebrow, .booking .button, .sessions-bottom, .footer-top", { y: 34, ecart: 0.09 });
+
+  /* Bandeau réassurance : entrée latérale */
+  var reassurance = document.querySelector(".reassurance");
+  if (reassurance) {
+    gsap.from(reassurance, { autoAlpha: 0, x: -40, duration: 0.9, ease: "power2.out",
+      scrollTrigger: { trigger: reassurance, start: "top 92%", once: true } });
+  }
+
+  /* Titre géant de la réservation : respiration au scroll */
+  var titreBooking = document.querySelector(".booking h2");
+  if (titreBooking) {
+    gsap.from(titreBooking, { scale: 0.92, ease: "none",
+      scrollTrigger: { trigger: ".booking", start: "top bottom", end: "top 40%", scrub: 1 } });
+  }
+
+  /* Tuiles : inclinaison 3D suivant le pointeur (orchestré par jQuery) */
+  if (window.jQuery) {
+    jQuery(".service").on("mousemove", function (e) {
+      var r = this.getBoundingClientRect();
+      var px = (e.clientX - r.left) / r.width - 0.5;
+      var py = (e.clientY - r.top) / r.height - 0.5;
+      gsap.to(this, { rotateY: px * 7, rotateX: -py * 6, y: -12, scale: 1.02,
+        transformPerspective: 900, duration: 0.5, ease: "power2.out" });
     });
+    jQuery(".service").on("mouseleave", function () {
+      gsap.to(this, { rotateX: 0, rotateY: 0, y: 0, scale: 1,
+        duration: 0.7, ease: "elastic.out(1, 0.55)" });
+    });
+    jQuery(".service").on("mouseenter", function () { jQuery(this).addClass("survol"); })
+                      .on("mouseleave", function () { jQuery(this).removeClass("survol"); });
+  }
+
+  /* Sculpture générative de la section réservation */
+  var zone = document.querySelector(".booking");
+  if (zone) {
+    var styleS = document.createElement("style");
+    styleS.textContent = ".booking{position:relative;overflow:hidden}" +
+      ".booking>.sculpture{position:absolute;inset:0;z-index:0;pointer-events:none}" +
+      ".booking>*:not(.sculpture){position:relative;z-index:1}";
+    document.head.appendChild(styleS);
+    var support = document.createElement("div");
+    support.className = "sculpture";
+    var canvas = document.createElement("canvas");
+    support.appendChild(canvas);
+    zone.insertBefore(support, zone.firstChild);
+    var ctx = canvas.getContext("2d");
+    function dimensionner() {
+      canvas.width = Math.max(1, Math.floor(zone.offsetWidth / 2));
+      canvas.height = Math.max(1, Math.floor(zone.offsetHeight / 2));
+      canvas.style.width = "100%"; canvas.style.height = "100%";
+    }
+    dimensionner();
+    window.addEventListener("resize", dimensionner);
+    var teintes = ["#426354", "#44634b", "#63806b", "#8aa58f", "#d7e1c8"];
+    var ondes = [];
+    for (var i = 0; i < 5; i++) {
+      ondes.push({ t: Math.random() * 6.28, v: 0.0018 + Math.random() * 0.0022,
+        a: 0.05 + Math.random() * 0.045, r: 0.26 + i * 0.075,
+        d: 0.10 + Math.random() * 0.08, c: teintes[i % teintes.length] });
+    }
+    var actif = false;
+    function dessine() {
+      if (!actif) return;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (var i = 0; i < ondes.length; i++) {
+        var o = ondes[i];
+        o.t += o.v;
+        var cx = canvas.width * (0.5 + Math.cos(o.t * 0.9 + i) * o.d);
+        var cy = canvas.height * (0.5 + Math.sin(o.t * 0.7 + i * 1.7) * o.d);
+        var ray = Math.min(canvas.width, canvas.height) * (o.r + Math.sin(o.t * 1.3 + i) * 0.03);
+        var g = ctx.createRadialGradient(cx, cy, 0, cx, cy, Math.max(1, ray));
+        g.addColorStop(0, o.c + Math.round(o.a * 255).toString(16).padStart(2, "0"));
+        g.addColorStop(1, o.c + "00");
+        ctx.fillStyle = g;
+        ctx.beginPath();
+        ctx.arc(cx, cy, Math.max(1, ray), 0, 6.283);
+        ctx.fill();
+      }
+      requestAnimationFrame(dessine);
+    }
+    new IntersectionObserver(function (e) {
+      var v = e[0].isIntersecting;
+      if (v && !actif) { actif = true; support.classList.add("ready"); requestAnimationFrame(dessine); }
+      else if (!v) { actif = false; }
+    }, { threshold: 0.05 }).observe(zone);
   }
 })();
 </script>
